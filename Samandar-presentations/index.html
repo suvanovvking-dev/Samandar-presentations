@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samandar Presentations</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Samandar Presentations</h1>
+    <p>Sifatli va chiroyli prezentatsiyalarga buyurtma bering!</p>
+  </header>
+
+  <main class="container">
+    <h2>Narxni Hisoblash Kalkulyatori</h2>
+
+    <!-- Varoqlar soni -->
+    <div class="form-group">
+      <label for="slides">Varoqlar soni (1 varoq = 2,000 so'm):</label>
+      <input type="number" id="slides" value="10" min="1" oninput="calculatePrice()">
+    </div>
+
+    <!-- Dizayn turi -->
+    <div class="form-group">
+      <label for="design">Dizayn turi:</label>
+      <select id="design" onchange="calculatePrice()">
+        <option value="0">Rasmsiz (faqat matn)</option>
+        <option value="1000">Rasmli (+1,000 so'm/varoq)</option>
+      </select>
+    </div>
+
+    <!-- Shoshilinch xizmat -->
+    <div class="form-group checkbox-group">
+      <label>
+        <input type="checkbox" id="urgent" onchange="calculatePrice()"> Shoshilinch buyurtma (+8,000 so'm)
+      </label>
+    </div>
+
+    <!-- Umumiy narx -->
+    <div class="price-box">
+      <h3>Umumiy narx: <span id="total-price">20,000</span> so'm</h3>
+      <p id="max-note" style="color: #e11d48; font-size: 12px; margin-top: 5px; display: none;">
+        *Maksimal narx 50,000 so'm qilib belgilandi!
+      </p>
+    </div>
+
+    <!-- Buyurtma berish tugmasi -->
+    <button class="btn" onclick="sendOrder()">Telegram orqali buyurtma berish</button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
