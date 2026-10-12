@@ -1,55 +1,147 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Samandar Presentations</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samandar Presentations | Premium Slaydlar</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Faylimizni ulaymiz -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <h1>Samandar Presentations</h1>
-    <p>Sifatli va chiroyli prezentatsiyalarga buyurtma bering!</p>
-  </header>
+    <!-- ANIMATED BACKGROUND CANVAS -->
+    <canvas id="bg-canvas"></canvas>
 
-  <main class="container">
-    <h2>Narxni Hisoblash Kalkulyatori</h2>
+    <!-- NAVIGATION BAR -->
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Samandar
+        </div>
+        <ul class="nav-links">
+            <li><a href="#hero">Bosh sahifa</a></li>
+            <li><a href="#calc">Hisoblash</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+        </ul>
+        <a href="https://t.me/nobody_can_saw" target="_blank" class="btn-glow">
+            <i class="fa-paper-plane fa-solid"></i> Bog'lanish
+        </a>
+    </nav>
 
-    <!-- Varoqlar soni -->
-    <div class="form-group">
-      <label for="slides">Varoqlar soni (1 varoq = 2,000 so'm):</label>
-      <input type="number" id="slides" value="10" min="1" oninput="calculatePrice()">
-    </div>
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+        <div class="hero-text">
+            <span class="hero-badge"><i class="fa-solid fa-bolt"></i> Visual Art & Design</span>
+            <h1 class="hero-title">Ajoyib <span>Taqdimotlar</span> Bilan Darsda Ajralib Turasiz!</h1>
+            <p class="hero-desc">Maktab, litsey hamda universitet darajasidagi barcha mavzularda zamonaviy 3D effektlar, sifatli dizayn va animatsiyaga boy slaydlar yarataman.</p>
+            <a href="#calc" class="btn-glow" style="padding: 15px 35px; font-size: 1.1rem;">
+                <i class="fa-solid fa-calculator"></i> Narxni Hisoblash
+            </a>
+        </div>
+        <div class="hero-preview">
+            <div class="card-3d">
+                <div class="slide-mockup">
+                    <i class="fa-solid fa-layer-group" style="font-size: 3rem; color: var(--accent-cyan); margin-bottom: 15px;"></i>
+                    <h3>Samandar Presentations</h3>
+                    <p style="color: var(--text-muted);">Innovatsion Dizayn & High-Tech Effect</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Dizayn turi -->
-    <div class="form-group">
-      <label for="design">Dizayn turi:</label>
-      <select id="design" onchange="calculatePrice()">
-        <option value="0">Rasmsiz (faqat matn)</option>
-        <option value="1000">Rasmli (+1,000 so'm/varoq)</option>
-      </select>
-    </div>
+    <!-- KALKULYATOR SECTION -->
+    <section id="calc">
+        <h2 class="section-title">Aniq Narx Kalkulyatori</h2>
+        <p class="section-subtitle">Slaydlar sonini tanlang (1 Slayd = 4,000 UZS)</p>
 
-    <!-- Shoshilinch xizmat -->
-    <div class="form-group checkbox-group">
-      <label>
-        <input type="checkbox" id="urgent" onchange="calculatePrice()"> Shoshilinch buyurtma (+8,000 so'm)
-      </label>
-    </div>
+        <div class="calc-container">
+            <div class="calc-group">
+                <div class="calc-label">
+                    <span>Slaydlar soni:</span>
+                    <span id="slide-count-val" style="color: var(--accent-cyan);">10 ta slayd</span>
+                </div>
+                <input type="range" min="1" max="50" value="10" class="calc-slider" id="slide-range">
+            </div>
 
-    <!-- Umumiy narx -->
-    <div class="price-box">
-      <h3>Umumiy narx: <span id="total-price">20,000</span> so'm</h3>
-      <p id="max-note" style="color: #e11d48; font-size: 12px; margin-top: 5px; display: none;">
-        *Maksimal narx 50,000 so'm qilib belgilandi!
-      </p>
-    </div>
+            <div class="calc-options">
+                <div class="option-card" id="opt-fast" onclick="toggleOption('fast')">
+                    <i class="fa-solid fa-stopwatch" style="color: var(--accent-cyan);"></i>
+                    <div>
+                        <div style="font-weight: 700;">Shoshilinch (24 soat)</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">+10,000 UZS</div>
+                    </div>
+                </div>
+                <div class="option-card" id="opt-3d" onclick="toggleOption('3d')">
+                    <i class="fa-solid fa-cube" style="color: var(--accent-purple);"></i>
+                    <div>
+                        <div style="font-weight: 700;">3D Infografika</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">+15,000 UZS</div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Buyurtma berish tugmasi -->
-    <button class="btn" onclick="sendOrder()">Telegram orqali buyurtma berish</button>
-  </main>
+            <div class="calc-result">
+                <div>
+                    <div style="color: var(--text-muted); font-size: 0.9rem;">Umumiy Qiymat:</div>
+                    <div class="price-display" id="total-price">40,000 UZS</div>
+                </div>
+                <button class="btn-glow" onclick="sendOrderTelegram()">
+                    <i class="fa-brands fa-telegram"></i> Telegramda Buyurtma Berish
+                </button>
+            </div>
+        </div>
+    </section>
 
-  <script src="script.js"></script>
+    <!-- PORTFOLIO SECTION -->
+    <section class="portfolio-section" id="portfolio">
+        <h2 class="section-title">Tayyor Ishlarim</h2>
+        <p class="section-subtitle">O'qituvchilar va o'quvchilar tomonidan yuqori baholangan slaydlar</p>
+
+        <div class="portfolio-grid">
+            <div class="portfolio-card">
+                <div class="portfolio-img" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80');">
+                    <i class="fa-solid fa-atom" style="color: var(--accent-cyan);"></i>
+                </div>
+                <div class="portfolio-info">
+                    <h3>Fizika & Kosmos</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">3D Elementlar va Koinot animatsiyasi</p>
+                </div>
+            </div>
+
+            <div class="portfolio-card">
+                <div class="portfolio-img" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80');">
+                    <i class="fa-solid fa-code" style="color: var(--accent-purple);"></i>
+                </div>
+                <div class="portfolio-info">
+                    <h3>Informatika & IT</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Cyberpunk neon dizayn va diagrammalar</p>
+                </div>
+            </div>
+
+            <div class="portfolio-card">
+                <div class="portfolio-img" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=600&q=80');">
+                    <i class="fa-solid fa-landmark" style="color: var(--accent-blue);"></i>
+                </div>
+                <div class="portfolio-info">
+                    <h3>Tarix & Madaniyat</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Klassik hamda zamonaviy aralash ko'rinish</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Samandar Presentations. Barcha huquqlar himoyalangan.</p>
+        <div class="social-links">
+            <a href="https://t.me/nobody_can_saw" target="_blank" class="social-btn"><i class="fa-brands fa-telegram"></i></a>
+            <a href="https://instagram.com" target="_blank" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <!-- JS Faylimizni ulaymiz -->
+    <script src="script.js"></script>
 </body>
 </html>

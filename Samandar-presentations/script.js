@@ -1,47 +1,97 @@
-function calculatePrice() {
-  const slides = parseInt(document.getElementById('slides').value) || 0;
-  const extraDesignPrice = parseInt(document.getElementById('design').value) || 0;
-  const isUrgent = document.getElementById('urgent').checked;
+// BACKGROUND ANIMATION (PARTICLES)
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
 
-  // 1 varoq narxi: 2000 so'm + dizayn qo'shimchasi (0 yoki 1000)
-  const basePagePrice = 2000 + extraDesignPrice;
-  
-  let total = slides * basePagePrice;
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-  // Shoshilinch bo'lsa +8,000 so'm
-  if (isUrgent) {
-    total += 8000;
-  }
-
-  // Maksimal narx 50,000 so'mdan oshmasligi kerak
-  const maxNote = document.getElementById('max-note');
-  if (total > 100000) {
-    total = 100000;
-    maxNote.style.display = 'block'; // Max narx qo'yilganini bildirish
-  } else {
-    maxNote.style.display = 'none';
-  }
-
-  // Natijani ekranga chiqarish
-  document.getElementById('total-price').innerText = total.toLocaleString();
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+        this.color = Math.random() > 0.5 ? '#00f2fe' : '#9d4edd';
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
 }
 
-function sendOrder() {
-  const slides = document.getElementById('slides').value;
-  const designSelect = document.getElementById('design');
-  const designText = designSelect.options[designSelect.selectedIndex].text;
-  const isUrgent = document.getElementById('urgent').checked ? "Ha" : "Yo'q";
-  const totalPrice = document.getElementById('total-price').innerText;
+for (let i = 0; i < 60; i++) particles.push(new Particle());
 
-  // O'zingizning Telegram username'ingiz
-  const myTelegramUsername = "nobody_can_saw"; 
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+        p.update();
+        p.draw();
+    });
+    requestAnimationFrame(animateParticles);
+}
+animateParticles();
 
-  // Telegram xabar matni
-  const message = `Assalomu alaykum! Yangi prezentatsiya buyurtmasi:%0A%0A` +
-                  `- Varoqlar soni: ${slides} ta%0A` +
-                  `- Dizayn turi: ${designText}%0A` +
-                  `- Shoshilinchligi: ${isUrgent}%0A` +
-                  `- Umumiy narx: ${totalPrice} so'm`;
+// CALCULATOR LOGIC (1 SLIDE = 4000 UZS)
+const slideRange = document.getElementById('slide-range');
+const slideVal = document.getElementById('slide-count-val');
+const totalPriceEl = document.getElementById('total-price');
 
-  window.open(`https://t.me/${myTelegramUsername}?text=${message}`, '_blank');
+let isFast = false;
+let is3D = false;
+
+function updatePrice() {
+    const slides = parseInt(slideRange.value);
+    slideVal.innerText = `${slides} ta slayd`;
+    
+    let total = slides * 4000;
+    if (isFast) total += 10000;
+    if (is3D) total += 15000;
+
+    totalPriceEl.innerText = `${total.toLocaleString('uz-UZ')} UZS`;
+}
+
+function toggleOption(opt) {
+    if (opt === 'fast') {
+        isFast = !isFast;
+        document.getElementById('opt-fast').classList.toggle('active', isFast);
+    }
+    if (opt === '3d') {
+        is3D = !is3D;
+        document.getElementById('opt-3d').classList.toggle('active', is3D);
+    }
+    updatePrice();
+}
+
+slideRange.addEventListener('input', updatePrice);
+
+// TELEGRAM ORDER DIRECT LINK (@nobody_can_saw)
+function sendOrderTelegram() {
+    const slides = slideRange.value;
+    const price = totalPriceEl.innerText;
+    
+    let msg = `Salom Samandar! Men taqdimot buyurtma qilmoqchiman:%0A%0A`;
+    msg += `📌 Slaydlar soni: ${slides} ta%0A`;
+    msg += `⚡ Tezkor tayyorlash: ${isFast ? 'Ha (+10,000 UZS)' : 'Yo\'q'}%0A`;
+    msg += `🧊 3D Infografika: ${is3D ? 'Ha (+15,000 UZS)' : 'Yo\'q'}%0A`;
+    msg += `💰 Umumiy narxi: ${price}`;
+
+    window.open(`https://t.me/nobody_can_saw?text=${msg}`, '_blank');
 }
